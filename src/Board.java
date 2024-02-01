@@ -1,16 +1,15 @@
-
 public class Board {
     public static void main(String[] args) {
         Board board = new Board();
     }
-    private String [][] squares = new String[10][10];
+    private String [][] squares;
 
-    public Board(){
-        for (int r = 0; r < squares.length; r++) {
-            for (int c = 0; c < squares[0].length; c++) {
-                System.out.print("-" + " ");
+    public Board() {
+        squares = new String[10][10];
+        for (int c = 0; c < squares[0].length; c++) {
+            for (int r = 0; r < squares.length; r++) {
+                squares[r][c] = "-" + " ";
             }
-            System.out.println();
         }
     }
 
@@ -26,18 +25,18 @@ public class Board {
     }
 
     public boolean addShip(int row,int col,int len,boolean horizontal){
-        boolean validSpot = true;
+        boolean validSpot = false;
         if (horizontal) {
             if (row <= 9 && row >= 0 && col <= 9 && col >= 0) {
                 if (col + len <= 10) {
                     for (int c = col; c < col + len; c++) {
-                        if (!squares[row][c].equals("-")) {
-                            validSpot = false;
+                        if (!squares[row - 1][c - 1].equals("-")) {
+                            validSpot = true;
                         }
                     }
                     if (validSpot) {
                         for (int c = col; c < col + len; c++) {
-                            squares[row][c] = "b";
+                            squares[row - 1][c - 1] = "b";
                         }
                         return true;
                     }
@@ -49,13 +48,13 @@ public class Board {
             if (row <= 9 && row >= 0 && col <= 9 && col >= 0) {
                 if (row + len <= 10) {
                     for (int r = row; r < row + len; r++) {
-                        if (!squares[r][col].equals("-")) {
-                            validSpot = false;
+                        if (!squares[r - 1][col - 1].equals("-")) {
+                            validSpot = true;
                         }
                     }
                     if (validSpot) {
                         for (int r = row; r < col + len; r++) {
-                            squares[r][col] = "b";
+                            squares[r - 1][col - 1] = "b";
                         }
                         return true;
                     }
@@ -73,6 +72,11 @@ public class Board {
             for (int c = 0; c < squares[0].length; c++) {
                 if (squares[r][c].equals("b")) {
                     count++;
+                } else if (count == len) {
+                    shipFound = true;
+                }
+                else{
+                    count = 0;
                 }
             }
         }
@@ -85,6 +89,12 @@ public class Board {
                 if (squares[r][c].equals("b")) {
                     count++;
                 }
+                else if (count == len) {
+                    shipFound = true;
+                }
+                else{
+                    count = 0;
+                }
             }
         }
         if (count == len) {
@@ -92,20 +102,20 @@ public class Board {
         }
         return shipFound;
     }
-    public int shoot(int row, int col) {
-        int doggyBags = -1;
-        if (row <= 10 && row > 0 && col <= 10 && col > 0) {
-            if (squares[row - 1][col - 1].equals("-")) {
+    public int shoot (int row, int col){
+        int doggyBags = 0;
+        if (row>= 0 && row<=10 && col>=0 && col<=10){
+            if (squares[row - 1][col - 1].equals("-")){
                 squares[row - 1][col - 1] = "m";
                 doggyBags = 0;
-            }
-            if (squares[row][col].equals("b")) {
+            } else if(squares[row - 1][col - 1].equals("b")){
                 squares[row - 1][col - 1] = "x";
                 doggyBags = 1;
-            }
-            if (squares[row - 1][col - 1].equals("m") || squares[row - 1][col - 1].equals("x")) {
+            } else if (squares[row - 1][col - 1].equals("x") || (squares[row - 1][col - 1].equals("m"))){
                 doggyBags = 2;
             }
+        } else{
+            doggyBags = -1;
         }
         return doggyBags;
     }
@@ -113,7 +123,7 @@ public class Board {
         boolean over = true;
         for (int r = 0; r < squares.length; r++) {
             for (int c = 0; c < squares[0].length; c++) {
-                if (squares[r][c] == "b") {
+                if (squares[r][c].equals("b")) {
                     over = false;
                     break;
                 }
