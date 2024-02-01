@@ -1,94 +1,125 @@
 import java.util.Scanner;
+
 public class InputHelper {
     public static void main(String[] args) {
-        //Test Method
         Scanner scan = new Scanner(System.in);
-        boolean done = getYNConfirm(scan, "Please enter YN");
+        // Test Methods
+
     }
 
-    //This method loops until a valid integer input is received. Returns int value.
-    public static int getInt(Scanner in, String prompt){
+    // this method loops until a valid integer input is received. Returns int
+    public static int getInt(Scanner in, String prompt) {
         boolean done = false;
         int x = 0;
+
         System.out.println(prompt);
         do {
             if (in.hasNextInt()) {
                 x = in.nextInt();
                 done = true;
-            }
-            else {
-                System.out.println("YOU HAVE ENTERED AN INVALID VALUE!!!!!!");
+            } else {
+                System.out.println("Error: Not an integer");
             }
             in.nextLine(); //clear buffer
         } while (!done);
         return x;
     }
 
-    public static int getRangedInt(Scanner in, String prompt, int min, int max){
+    public static int getRangedInt(Scanner in, String prompt, int min, int max) {
         boolean done = false;
         int x = 0;
+
         System.out.println(prompt);
         do {
             if (in.hasNextInt()) {
                 x = in.nextInt();
-                //check to see if value is in the range
+                //checks for value in range
                 if (x <= max && x >= min) {
                     done = true;
+                } else {
+                    System.out.println("Error blah");
                 }
-                else {
-                    System.out.println("YOU HAVE ENTERED AN INVALID VALUE!!!!!!");
-                }
-
-            }
-            else {
-                System.out.println("YOU HAVE ENTERED AN INVALID VALUE!!!!!!");
+            } else {
+                System.out.println("Error");
             }
             in.nextLine(); //clear buffer
         } while (!done);
         return x;
     }
 
-    public static double getDouble(Scanner in, String prompt){
+    public static String getRegExString(Scanner in, String prompt, String regEx) {
+        String input;
+        boolean valid = false;
+
+        do {
+            System.out.println(prompt);
+            input = in.nextLine();
+            if (input.matches(regEx)) {
+                valid = true;
+            } else {
+                System.out.println("Error");
+            }
+        } while (!valid);
+
+        return input;
+    }
+
+    public static String getNonZeroLenString(Scanner in, String prompt) {
         boolean done = false;
-        double x = 0;
+        String word;
         System.out.println(prompt);
         do {
+            word = in.nextLine();
+            if (word.length() > 0) {
+                done = true;
+            } else {
+                System.out.println("Error: Zero length string");
+            }
+        } while (!done);
+
+        return word;
+    }
+
+    public static double getDouble(Scanner in, String prompt) {
+        boolean done = false;
+        double x = 0;
+
+        do {
+            System.out.println(prompt);
             if (in.hasNextDouble()) {
                 x = in.nextDouble();
                 done = true;
-            }
-            else {
-                System.out.println("YOU HAVE ENTERED AN INVALID VALUE!!!!!!");
+            } else {
+                System.out.println("Error: Not a double");
             }
             in.nextLine();
         } while (!done);
         return x;
     }
 
-    public static double getRangedDouble(Scanner in, String prompt, double min, double max){
+    public static double getRangedDouble(Scanner in, String prompt, double min, double max) {
         boolean done = false;
         double x = 0;
+
         System.out.println(prompt);
         do {
             if (in.hasNextDouble()) {
                 x = in.nextDouble();
-                //check to see if value is in the range
+                //checks for value in range
                 if (x <= max && x >= min) {
                     done = true;
+                } else {
+                    System.out.println("Error: Out of range");
                 }
-                else {
-                    System.out.println("WRONG INPUT");
-                }
-
-            }
-            else {
-                System.out.println("WRONG INPUT");
+            } else {
+                System.out.println("Error: Not a double");
             }
             in.nextLine(); //clear buffer
         } while (!done);
         return x;
     }
-    public static int getPositiveNonZeroInt (Scanner in, String prompt){
+
+    public static int getPositiveNonZeroInt(Scanner in, String prompt) {
         boolean done = false;
         int x = 0;
 
@@ -96,33 +127,20 @@ public class InputHelper {
         do {
             if (in.hasNextInt()) {
                 x = in.nextInt();
+                //checks for value in range
                 if (x > 0) {
                     done = true;
                 } else {
-                    System.out.println("YOU ENTERED A NEGATIVEE");
+                    System.out.println("Error: Enter a positive nonzero integer");
                 }
             } else {
-                System.out.println("THATS WRONGGGGG!!!!");
+                System.out.println("Error: Not an integer");
             }
-            in.nextLine();
+            in.nextLine(); //clear buffer
         } while (!done);
         return x;
     }
-    public static String getRegExString(Scanner in, String prompt, String regEx){
-        boolean done = false;
-        String input;
-        System.out.println(prompt);
-        do {
-            input = in.nextLine();
-            if (input.matches(regEx)) {
-                done = true;
-            }
-            else {
-                System.out.println("YOU HAVE ENTERED AN INVALID VALUE!!!!!!");
-            }
-        } while (!done);
-        return input;
-    }
+
     public static boolean getYNConfirm(Scanner in, String prompt) {
         boolean done = false;
         String YN;
@@ -137,25 +155,34 @@ public class InputHelper {
             }
         } while (!done);
         if (YN.equals("N")) {
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
-    public static String getNonZeroLenString (Scanner in, String prompt){
-        boolean done = false;
-        String input;
-        System.out.println(prompt);
-        do {
-            input = in.nextLine();
-            if (input.length() > 0) {
-                done = true;
-            }
-            else {
-                System.out.println("You have entered an invalid String");
-            }
-        } while (!done);
-        return input;
-    }
 
+    public static void prettyHeader(String msg) {
+        String x = " ";
+        int i = 0;
+        int a = 0;
+        int y = msg.length();
+        int z = (60-y)/2 -2 ;
+        for (i = 0; i < 60; i++) {
+            System.out.print("*");
+        }
+        System.out.print("\n");
+        for (i = 0; i < 60; i++) {
+            if (z == i) {
+                System.out.print(msg);
+            } else if (i < 3 || i > 56) {
+                System.out.print("*");
+            } else if (i < 56 - (msg.length()-2)) {
+                System.out.print(x);
+            }
+        }
+        System.out.print("\n");
+        for (i = 0; i < 60; i++) {
+            System.out.print("*");
+        }
+    }
 }
